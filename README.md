@@ -1,4 +1,4 @@
-# Spam vs Ham Message Detector using Flask & ML
+# 📧 Spam vs Ham Message Detector using Flask & ML
 
 A Machine Learning web application that classifies text messages as **Spam** or **Ham (Not Spam)** using **TF-IDF** and **Linear SVM**, built with Flask.
 
@@ -27,51 +27,77 @@ A Machine Learning web application that classifies text messages as **Spam** or 
 
 ## 📁 Project Structure
 
-SPAM 
-│ 
-├── app.py                     # Main Flask app 
-├── email_cleaned.csv          # Dataset 
-├── requirements.txt           # Dependencies 
-├── test_app.py                # Test file 
-│ 
-├── templates/  
-         └── index.html        # UI (optional)
-|
-│ └── .github/ 
-          └── workflows/ 
-                  └── test.yml # CI/CD pipeline
 ```
+SPAM
+│
+├── app.py                     # Main Flask app
+├── email_cleaned.csv          # Dataset
+├── requirements.txt           # Dependencies
+├── test_app.py                # Test file
+│
+├── templates/
+│   └── index.html             # UI (optional)
+│
+└── .github/
+    └── workflows/
+        └── test.yml           # CI/CD pipeline
+```
+
 ---
- ## ⚙️ Installation & Setup
-* 1️⃣ Clone Repository
+
+## ⚙️ Installation & Setup
+
+### 1️⃣ Clone Repository
+
+```
 git clone https://github.com/iamkrishna07/Spam-vs-Ham-Message-Detector-using-Flask-ML.git
 cd Spam-vs-Ham-Message-Detector-using-Flask-ML
- * 2️⃣ Install Dependencies
+```
+
+### 2️⃣ Install Dependencies
+
+```
 pip install -r requirements.txt
- * 3️⃣ Run Application
+```
+
+### 3️⃣ Run Application
+
+```
 python app.py
+```
 
 👉 Open in browser:
 http://127.0.0.1:5000/
+
 ---
-  ##🧪 Testing
+
+## 🧪 Testing
 
 Run tests using:
 
+```
 pytest
-🔄 CI/CD Pipeline (GitHub Actions)
+```
 
-This project uses GitHub Actions for automatic testing.
+---
 
-What happens on every push?
-📥 Code is pulled from repository
-📦 Dependencies are installed
-🧪 Tests are executed
-✅ Result is shown (Pass/Fail)
+## 🔄 CI/CD Pipeline (GitHub Actions)
+
+This project uses **GitHub Actions** for automatic testing.
+
+### What happens on every push?
+
+* 📥 Code is pulled from repository
+* 📦 Dependencies are installed
+* 🧪 Tests are executed
+* ✅ Result is shown (Pass/Fail)
 
 👉 Workflow file:
 
+```
 .github/workflows/test.yml
+```
+
 ---
 
 ## 📊 Machine Learning Model
@@ -96,3 +122,6 @@ Congratulations! You won a free lottery ticket
 ```
 SPAM
 ```
+
+---
+
