@@ -12,4 +12,3 @@ def test_prediction():
     response = client.post('/', data={"message": "Free money"})
     assert response.status_code == 200
 
-
