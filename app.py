@@ -1,10 +1,9 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, request
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.svm import LinearSVC
 
 app = Flask(__name__)
-app.secret_key = "spam_detector_secret_key"
 
 # =====================
 # LOAD DATA (SAFE)
@@ -25,13 +24,10 @@ try:
 except Exception as e:
     print("Error loading dataset:", e)
 
-    # fallback (for testing)
+    # fallback model (for testing)
     vectorizer = TfidfVectorizer()
     model = LinearSVC()
-
-    # dummy training (so app doesn't crash)
     model.fit(["test message"], [0])
-
 
 # =====================
 # ROUTE
@@ -46,32 +42,12 @@ def home():
             prediction = model.predict(message_vec)[0]
 
             if str(prediction) == '1':
-                result = 'SPAM'
-                css_class = 'spam'
+                return "SPAM"
             else:
-                result = 'HAM'
-                css_class = 'ham'
-        else:
-            result = "No message entered"
-            css_class = ""
+                return "HAM"
 
-        session['message'] = message
-        session['result'] = result
-        session['css_class'] = css_class
-
-        return redirect(url_for('home'))
-
-    message = session.pop('message', '')
-    result = session.pop('result', None)
-    css_class = session.pop('css_class', '')
-
-    return render_template(
-        'index.html',
-        message=message,
-        result=result,
-        css_class=css_class
-    )
-
+    # ✅ IMPORTANT: simple response (no template error)
+    return "App is running"
 
 # =====================
 # RUN APP
