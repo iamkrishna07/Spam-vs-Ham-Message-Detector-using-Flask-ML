@@ -9,3 +9,5 @@ def test_prediction():
     client = app.test_client()
     response = client.post('/', data={"message": "Free money"})
     assert response.status_code == 200
+
+
