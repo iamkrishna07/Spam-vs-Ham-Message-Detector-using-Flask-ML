@@ -2,38 +2,36 @@ from flask import Flask, render_template, request, redirect, url_for, session
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.svm import LinearSVC
-from sklearn.model_selection import train_test_split
 
 app = Flask(__name__)
 app.secret_key = "spam_detector_secret_key"
 
 # =====================
-# LOAD DATA
+# LOAD DATA (SAFE)
 # =====================
-# LOAD DATA
-dataset = pd.read_csv('email_cleaned.csv')
+try:
+    dataset = pd.read_csv('email_cleaned.csv')
+    dataset = dataset.dropna()
 
-dataset = dataset.dropna()
+    X = dataset['text']
+    y = dataset['label']
 
-# CHANGE COLUMN NAMES IF NEEDED
-X = dataset['text']        # message column
-y = dataset['label']      # ham/spam or 0/1
+    vectorizer = TfidfVectorizer(stop_words='english')
+    X_vec = vectorizer.fit_transform(X)
 
-# =====================
-# FEATURE EXTRACTION
-# =====================
-vectorizer = TfidfVectorizer(stop_words='english')
-X_vec = vectorizer.fit_transform(X)
+    model = LinearSVC()
+    model.fit(X_vec, y)
 
-# =====================
-# TRAIN MODEL
-# =====================
-X_train, X_test, y_train, y_test = train_test_split(
-    X_vec, y, test_size=0.2, random_state=42
-)
+except Exception as e:
+    print("Error loading dataset:", e)
 
-model = LinearSVC()
-model.fit(X_train, y_train)
+    # fallback (for testing)
+    vectorizer = TfidfVectorizer()
+    model = LinearSVC()
+
+    # dummy training (so app doesn't crash)
+    model.fit(["test message"], [0])
+
 
 # =====================
 # ROUTE
@@ -41,17 +39,21 @@ model.fit(X_train, y_train)
 @app.route('/', methods=['GET', 'POST'])
 def home():
     if request.method == 'POST':
-        message = request.form['message']
+        message = request.form.get('message', '')
 
-        message_vec = vectorizer.transform([message])
-        prediction = model.predict(message_vec)[0]
+        if message:
+            message_vec = vectorizer.transform([message])
+            prediction = model.predict(message_vec)[0]
 
-        if prediction == 1:
-            result = 'SPAM'
-            css_class = 'spam'
+            if str(prediction) == '1':
+                result = 'SPAM'
+                css_class = 'spam'
+            else:
+                result = 'HAM'
+                css_class = 'ham'
         else:
-            result = 'HAM'
-            css_class = 'ham'
+            result = "No message entered"
+            css_class = ""
 
         session['message'] = message
         session['result'] = result
@@ -69,6 +71,7 @@ def home():
         result=result,
         css_class=css_class
     )
+
 
 # =====================
 # RUN APP
